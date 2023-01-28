@@ -1,7 +1,7 @@
 Lab 03 - Nobel laureates
 ================
-Insert your name here
-Insert date here
+Ryan Wheat
+01/28/23
 
 ### Load packages and data
 
