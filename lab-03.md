@@ -59,11 +59,14 @@ glimpse(nobel)
 I have 228 observations!
 
 ``` r
+#creating new dataset
+
 nobel_living <- nobel %>%
   filter(!is.na(x = country)) %>%
   filter(gender != "org") %>%
   filter(is.na(x = died_date))
 
+#making sure i did it right
 glimpse(nobel_living)
 ```
 
@@ -96,11 +99,30 @@ glimpse(nobel_living)
     ## $ city_original         <chr> "Princeton NJ", "New York NY", "Providence RI", …
     ## $ country_original      <chr> "USA", "USA", "USA", "USA", "USA", "United Kingd…
 
+``` r
+nobel_living <- nobel_living %>%
+  mutate(
+    country_us = if_else(country == "USA", "USA", "Other")
+  )
+
+nobel_living_science <- nobel_living %>%
+  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
+```
+
 ### Exercise 3
 
-Remove this text, and add your answer for Exercise 1 here. Add code
-chunks as needed. Don’t forget to label your code chunk. Do not use
-spaces in code chunk labels.
+It does seem as though, across all categories, nobel prize winners
+tended to be located in the United States when receiving their award.
+This provides support the article’s claims so far.
+
+``` r
+ggplot(nobel_living_science, aes(x = country_us)) +
+  geom_bar() +
+  facet_wrap(~category) +
+  coord_flip()
+```
+
+![](lab-03_files/figure-gfm/location%20visuals-1.png)<!-- -->
 
 ### Exercise 4
 
