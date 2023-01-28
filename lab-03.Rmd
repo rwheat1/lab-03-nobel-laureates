@@ -19,17 +19,24 @@ nobel <- read_csv("data/nobel.csv")
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+There are 26 variables, and 935 observations within the Nobel dataset. Each row represents one nobel prize winner, and their subsequent information.
+
+```{r glimpse data}
+glimpse(nobel)
+```
 
 ### Exercise 2
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+I have 228 observations!
+
+```{r filters}
+nobel_living <- nobel %>%
+  filter(!is.na(x = country)) %>%
+  filter(gender != "org") %>%
+  filter(is.na(x = died_date))
+
+glimpse(nobel_living)
+```
 
 ### Exercise 3
 
