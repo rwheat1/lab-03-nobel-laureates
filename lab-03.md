@@ -101,9 +101,7 @@ glimpse(nobel_living)
 
 ``` r
 nobel_living <- nobel_living %>%
-  mutate(
-    country_us = if_else(country == "USA", "USA", "Other")
-  )
+  mutate(country_us = if_else(country == "USA", "USA", "Other"))
 
 nobel_living_science <- nobel_living %>%
   filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
@@ -116,6 +114,7 @@ tended to be located in the United States when receiving their award.
 This provides support the article’s claims so far.
 
 ``` r
+#bar graph plot
 ggplot(nobel_living_science, aes(x = country_us)) +
   geom_bar() +
   facet_wrap(~category) +
@@ -126,12 +125,67 @@ ggplot(nobel_living_science, aes(x = country_us)) +
 
 ### Exercise 4
 
-…
+105 out of 228 nobel prize winners were born in the U.S.
+
+``` r
+#creating new birth variable
+
+nobel_living_science <- nobel_living_science %>%
+  mutate(born_country_us = if_else(born_country == "USA", "USA", "Other"))
+
+#count of usa vs. other birth countries
+nobel_living_science %>%
+  count(born_country_us)
+```
+
+    ## # A tibble: 2 × 2
+    ##   born_country_us     n
+    ##   <chr>           <int>
+    ## 1 Other             123
+    ## 2 USA               105
 
 ### Exercise 5
 
-…
+The majority of US-based nobel prize winners were also born in the US –
+but a noticeable portion were not for each prize category. This seems to
+support BuzzFeeds claims that immigration is important for scientific
+pursuits.
+
+``` r
+#bar graph plot from before but adding fill
+ggplot(nobel_living_science, aes(x = country_us, fill = born_country_us)) +
+  geom_bar() +
+  facet_wrap(~category) +
+  coord_flip()
+```
+
+![](lab-03_files/figure-gfm/nobel%20winner%20current%20location%20and%20birth-1.png)<!-- -->
 
 ### Exercise 6
 
-…
+UK and Germany are tied for the most common at 7 nobel prize winners who
+were based in the US.
+
+``` r
+#filter out USA born from USA-based winners
+nobel_living_science %>%
+  filter(country_us == "USA" & born_country_us != "USA") %>%
+  #count the countries remaining
+  count(born_country) %>%
+  arrange(desc(n))
+```
+
+    ## # A tibble: 21 × 2
+    ##    born_country       n
+    ##    <chr>          <int>
+    ##  1 Germany            7
+    ##  2 United Kingdom     7
+    ##  3 China              5
+    ##  4 Canada             4
+    ##  5 Japan              3
+    ##  6 Australia          2
+    ##  7 Israel             2
+    ##  8 Norway             2
+    ##  9 Austria            1
+    ## 10 Finland            1
+    ## # … with 11 more rows

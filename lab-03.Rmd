@@ -44,10 +44,9 @@ glimpse(nobel_living)
 
 
 ```{r us based winners}
+
 nobel_living <- nobel_living %>%
-  mutate(
-    country_us = if_else(country == "USA", "USA", "Other")
-  )
+  mutate(country_us = if_else(country == "USA", "USA", "Other"))
 
 nobel_living_science <- nobel_living %>%
   filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
@@ -60,6 +59,7 @@ It does seem as though, across all categories, nobel prize winners tended to be 
 
 ```{r location visuals}
 
+#bar graph plot
 ggplot(nobel_living_science, aes(x = country_us)) +
   geom_bar() +
   facet_wrap(~category) +
@@ -68,15 +68,47 @@ ggplot(nobel_living_science, aes(x = country_us)) +
 
 ### Exercise 4
 
-```{r }
+105 out of 228 nobel prize winners were born in the U.S.
 
+```{r birth location}
+
+#creating new birth variable
+
+nobel_living_science <- nobel_living_science %>%
+  mutate(born_country_us = if_else(born_country == "USA", "USA", "Other"))
+
+#count of usa vs. other birth countries
+nobel_living_science %>%
+  count(born_country_us)
 ```
 
 
 ### Exercise 5
 
-...
+The majority of US-based nobel prize winners were also born in the US -- but a noticeable portion were not for each prize category. This seems to support BuzzFeeds claims that immigration is important for scientific pursuits.
+
+```{r nobel winner current location and birth}
+
+#bar graph plot from before but adding fill
+ggplot(nobel_living_science, aes(x = country_us, fill = born_country_us)) +
+  geom_bar() +
+  facet_wrap(~category) +
+  coord_flip()
+```
+
 
 ### Exercise 6
 
-...
+UK and Germany are tied for the most common at 7 nobel prize winners who were based in the US.
+
+```{r is uk best outside country?}
+
+#filter out USA born from USA-based winners
+nobel_living_science %>%
+  filter(country_us == "USA" & born_country_us != "USA") %>%
+  #count the countries remaining
+  count(born_country) %>%
+  arrange(desc(n))
+
+```
+
